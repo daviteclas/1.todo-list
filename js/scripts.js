@@ -144,6 +144,7 @@ searchInput.addEventListener("input", (e) => {
 
 eraseBtn.addEventListener("click", (e) => {
     e.preventDefault();
+    const todos = document.querySelectorAll("#todo-list div");
 
     searchInput.value = '';
 
