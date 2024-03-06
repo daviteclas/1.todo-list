@@ -12,7 +12,6 @@ const filter = document.querySelector("#filter-select");
 
 // Inicializar variaveis globais
 let oldValueInput;
-let todosData = []
 
 // Funções
 
