@@ -12,6 +12,7 @@ const filter = document.querySelector("#filter-select");
 
 // Inicializar variaveis globais
 let oldValueInput;
+let todosData = []
 
 // Funções
 
@@ -22,6 +23,8 @@ const saveTodo = text => {
     const todoTitle = document.createElement("h3");
     todoTitle.innerText = text;
     todo.appendChild(todoTitle);
+
+    localStorage.setItem(`${todoTitle.textContent}`, todoTitle.textContent);
 
     const doneBtn = document.createElement("button");
     doneBtn.classList.add("finish-todo");
@@ -56,10 +59,19 @@ const updateTodo = (text) => {
     todos.forEach((todo) => {
         let todoTitle = todo.querySelector("h3");
 
-        console.log(todoTitle, text);
-
         if (todoTitle.innerText === oldValueInput) {
             todoTitle.innerText = text;
+            
+            // OBS: É a primeira vez que uso localstorage, ficou uma gambiarra, mas funciona
+
+            localStorage.setItem(`${todoTitle.textContent}`, todoTitle.textContent);
+
+            Object.keys(localStorage).forEach(key => {
+                let valueKey = localStorage.getItem(key);
+                if (oldValueInput === valueKey) {
+                    localStorage.removeItem(key);
+                }
+            });
         }
     });
 }
@@ -82,7 +94,7 @@ document.addEventListener("click", (e) => {
     let todoTitle;
     
     if (parentEl && parentEl.querySelector("h3")) {
-        todoTitle = parentEl.querySelector("h3").innerText        
+        todoTitle = parentEl.querySelector("h3").innerText
     }
 
     if (targetEl.classList.contains("finish-todo")) {
@@ -91,6 +103,7 @@ document.addEventListener("click", (e) => {
 
     if (targetEl.classList.contains("delete-todo")) {
         parentEl.remove();
+        localStorage.removeItem(parentEl.querySelector("h3").textContent)
     }
     if (targetEl.classList.contains("edit-todo")) {
         toggleForms();
@@ -175,4 +188,10 @@ filter.addEventListener("change", () => {
             }
         }
     }
+})
+
+document.addEventListener("DOMContentLoaded", () => {
+    Object.keys(localStorage).forEach(key => {
+        saveTodo(localStorage.getItem(key))
+    });
 })
